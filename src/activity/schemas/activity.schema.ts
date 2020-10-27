@@ -21,6 +21,11 @@ export const ActivitySchema = new mongoose.Schema({
     price :{
         type: Number,
     },
+    is_active:{
+        type: Boolean,
+        required: true,
+        default: true,
+    },
     categoryID : {
         // required: true,
         type: mongoose.Schema.Types.ObjectId,
