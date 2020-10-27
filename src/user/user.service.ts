@@ -8,12 +8,17 @@ import { CreateUpdateEducatorDto } from './dto/create_educator.dto';
 import { CreateUpdateStudentDto } from './dto/create_student.dto';
 
 
+
 @Injectable()
 export class UserService {
     constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
     
     async findAll(): Promise<User[]>{
         return this.userModel.find();
+    }
+
+    async findOneByUsername(username: string): Promise<User>{
+        return this.userModel.findOne({username: username })
     }
 
     async findAllEducators() : Promise<User[]> {

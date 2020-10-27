@@ -1,6 +1,6 @@
 export class CreateUpdateEducatorDto {
     readonly name: string;
-    readonly password: string;
+    password: string;
     readonly email: string;
     readonly username: string;
     readonly gender: string;

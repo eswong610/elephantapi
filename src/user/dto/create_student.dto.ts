@@ -2,6 +2,7 @@ export class CreateUpdateStudentDto {
     readonly name: string;
     readonly email: string;
     readonly username: string;
+    readonly password : string;
     readonly gender: string;
     readonly age: string;
     readonly caretaker_name: string;

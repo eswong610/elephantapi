@@ -1,6 +1,9 @@
 import * as mongoose from 'mongoose'
+import * as bcrypt from 'bcrypt'
+
 
 export const UserSchema = new mongoose.Schema({
+
     name: {
         type: String,
         required: true
@@ -15,7 +18,8 @@ export const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: [4,  'Password must be 4 characters or more.']
     },
     gender: {
         type: String,
@@ -48,3 +52,28 @@ export const UserSchema = new mongoose.Schema({
         type: String,
     },
 }, {timestamps : true})
+
+// UserSchema.pre('save',  async function (next: mongoose.HookNextFunction) {
+//     console.log('just before saving')
+//     var user = this;
+//     try{
+//         if (!this.isModified('password')) {
+//             return next();
+//           }
+//         const saltRounds = 10; // What you want number for round paasword
+//         bcrypt.genSalt(saltRounds, function(err, salt) {
+//             if(err) return next(err);
+//             bcrypt.hash(user.password, salt, function(err, hash) {
+//                 if(err) return next(err);
+//                 // Store hash in your password DB.
+//                 console.log(hash)
+//                 user.password = hash;
+//                 console.log(user.password)
+                
+//                 return next();
+//             });
+//         });
+//     }catch(err) {
+//         return next(err)
+//     }
+//   })
