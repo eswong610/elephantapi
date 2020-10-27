@@ -21,7 +21,7 @@ export class AuthService {
     // const staticuser = await this.usersService.findOne(username);
     const user = await this.userService.findOneByUsername(username);
     console.log('from authservice')
-    console.log(user);
+    
     if (!user) {
         throw new HttpException({
             status: HttpStatus.FORBIDDEN,
@@ -46,9 +46,13 @@ export class AuthService {
 
   async login(user: any) {
     // const payload = { username: user.username, sub: user.userId };
-    const payload = { username: user.username, email: user.email };
+    console.log('login payload')
+    console.log(user);
+    const payload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
     };
   }
+
+  
 }

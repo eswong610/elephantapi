@@ -2,10 +2,11 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { jwtConstants } from './constants';
+import { UserService } from '../user/user.service'
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private userService: UserService,) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -15,6 +16,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   //could do a database lookup in our validate() method to extract more information about the user
   async validate(payload: any) {
-    return { email: payload.email, username: payload.username };
+    var dbUser = await this.userService.findOneByUsername(payload.username)
+    console.log(payload)
+    //add in things you want to add to user object
+    if (dbUser.is_educator) {
+        return { 
+            _id: dbUser.name, 
+            email: dbUser.email, 
+            is_educator: dbUser.is_educator,
+            is_verified: dbUser.is_verified,
+            telephone: dbUser.phone_number,
+            gender: dbUser.gender,
+            rating: dbUser.educator_rating,
+            image_url: dbUser.image_url
+          };
+    } 
   }
 }
