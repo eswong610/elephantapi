@@ -4,4 +4,5 @@ export interface Activity {
     start_time: Date,
     end_time: Date,
     educatorID: string,
+    categoryID: string
 }

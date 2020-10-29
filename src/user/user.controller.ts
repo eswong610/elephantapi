@@ -16,25 +16,20 @@ export class UserController {
         return this.userService.findAll();
     }
 
-    // @Get('educator/:id')
-    // async getOneEducator(@Param() param): Promise<Educator>{
-    //     return this.userService.findEducator(param.id);
-    // }
+    @Get(':id')
+    async getOneStudent(@Param() param): Promise<Student>{
+        return this.userService.findById(param.id);
+    }
 
-    // @Get('student/:id')
-    // async getOneStudent(@Param() param): Promise<Student>{
-    //     return this.userService.findStudent(param.id);
-    // }
+    @Get('educators')
+    async getEducators(): Promise<Educator[]>{
+        return this.userService.findAllEducators();
+    }
 
-    // @Get('educators')
-    // async getEducators(): Promise<Educator[]>{
-    //     return this.userService.findAllEducators();
-    // }
-
-    // @Get('students')
-    // async getStudents(): Promise<Student[]>{
-    //     return this.userService.findAllStudents();
-    // }
+    @Get('students')
+    async getStudents(): Promise<Student[]>{
+        return this.userService.findAllStudents();
+    }
 
     @Post("create-educator")
     async createEducator(@Body() createUpdateEducatorDto: CreateUpdateEducatorDto) : Promise<Educator>{

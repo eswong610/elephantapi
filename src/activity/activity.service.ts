@@ -11,6 +11,10 @@ export class ActivityService {
         return this.activityModel.find();
     }
 
+    async findByCategory(catID:string) : Promise<Activity[]>{
+        return this.activityModel.find({categoryID : catID})
+    }
+
     async findOne(id: string): Promise<Activity> {
         return this.activityModel.findOne({_id: id});
     }

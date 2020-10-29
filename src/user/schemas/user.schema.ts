@@ -21,6 +21,10 @@ export const UserSchema = new mongoose.Schema({
         required: true,
         minlength: [4,  'Password must be 4 characters or more.']
     },
+    description:{
+        type: String,
+        maxlength: [300, 'Max character count is 300 letters.']
+    },
     gender: {
         type: String,
         required: true
@@ -35,8 +39,14 @@ export const UserSchema = new mongoose.Schema({
     disability_name: {
         type: String,
     },
-    caretaker_name: {
+    disability_spectrum: {
+        type: Number,
+    },
+    student_name: {
         type: String,
+    },
+    student_interests:{
+        type: Array,
     },
     is_educator: {
         type: Boolean,

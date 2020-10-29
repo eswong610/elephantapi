@@ -21,16 +21,22 @@ export class UserService {
         return this.userModel.findOne({username: username })
     }
 
-    async findAllEducators() : Promise<User[]> {
-        return this.userModel.find();
+    async findById(id: string): Promise<User> {
+        return this.userModel.findOne({_id: id})
     }
+
+    async findAllEducators() : Promise<Educator[]> {
+        return this.userModel.find({is_educator : true});
+    }
+
+
 
     async findEducator(id: string): Promise<Educator> {
         return this.userModel.findOne({_id: id});
     }
 
     async findAllStudents() : Promise<Student[]> {
-        return this.userModel.find();
+        return this.userModel.find({is_educator: false});
     }
 
     async findStudent(id: string): Promise<Student> {
