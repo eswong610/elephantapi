@@ -11,23 +11,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(username: string, password: string): Promise<any> {
-    const user = await this.authService.validateUser(username, password);
-    console.log(user);
-    if (user == undefined) {
-        throw new HttpException({
-            status: HttpStatus.FORBIDDEN,
-            error: 'Nothing found',
-          }, HttpStatus.FORBIDDEN);
-      }
-    bcrypt.compare(password, user.password, function(err, result) {
-        if (result){
-            const { password, ...res} = user;
-            return res;
-        }else{
-            return err;
-        }
-    });
-    
+    console.log(username, password)
+    const user = await this.authService.validateUser(username, password)
+    console.log('from local strat ' + user);
+    if (!user) {
+      throw new UnauthorizedException();
+    }
     return user;
   }
 }
