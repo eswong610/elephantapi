@@ -2,8 +2,13 @@ import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserSchema } from './schemas/user.schema';
+import { RatingSchema } from '../educator-rating/schemas/rating.schema';
+
 import { MongooseModule } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
+import { EducatorRatingService } from 'src/educator-rating/educator-rating.service';
+// import { EducatorRatingModule } from 'src/educator-rating/educator-rating.module';
+import { EducatorRatingModule } from '../educator-rating/educator-rating.module'
 
 @Module({
 //   imports: [MongooseModule.forFeature([{name: "User", schema: UserSchema}])],
@@ -35,7 +40,7 @@ import * as bcrypt from 'bcrypt';
             
           },
       }
-    ])],
+    ]), EducatorRatingModule],
   controllers: [UserController],
   providers: [UserService],
   exports: [UserService]

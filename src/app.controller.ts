@@ -7,13 +7,14 @@ import { AuthService } from './auth/auth.service';
 
 
 @Controller()
+
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private authService: AuthService
     ) {}
 
-  // @UseGuards(LocalAuthGuard)
+  @UseGuards(LocalAuthGuard)
   @Post('auth/login')
   async login(@Request() req) {
     console.log('this is req.body')

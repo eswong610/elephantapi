@@ -19,6 +19,14 @@ export class ActivityService {
         return this.activityModel.findOne({_id: id});
     }
 
+    async findByEducator(id: string): Promise<Activity[]> {
+        return this.activityModel.find({ educatorID : id})
+    }
+
+    async findByStudent(id: string) : Promise<Activity[]>{
+        return this.activityModel.find({ studentID : id })
+    }
+
     async create(createActivityDto: CreateUpdateActivityDto): Promise<Activity> {
         const createdActivity = new this.activityModel(createActivityDto)
         return createdActivity.save();

@@ -18,10 +18,12 @@ export class AuthService {
 
   async validateUser(username: string, pass: string): Promise<any> {
     // const staticuser = await this.usersService.findOne(username);
-    const user = await this.userService.findOneByUsername(username);
-    console.log('from authservice')
+    const user = await this.userService.findOneByUsername(username)
     
-    if (!user) {
+    console.log('from authservice')
+    console.log(user);
+
+    if (user.id == undefined) {
         throw new HttpException({
             status: HttpStatus.FORBIDDEN,
             error: 'Nothing found',
@@ -30,6 +32,7 @@ export class AuthService {
     bcrypt.compare(pass, user.password, function(err, result) {
         if (result){
             const { password, ...res} = user;
+            console.log('passed bcrypt')
             return res;
         }else{
             return err;

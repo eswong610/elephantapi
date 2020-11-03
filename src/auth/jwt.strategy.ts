@@ -17,6 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   //could do a database lookup in our validate() method to extract more information about the user
   async validate(payload: any) {
     var dbUser = await this.userService.findOneByUsername(payload.username)
+    console.log('jwt.strategy.payload')
     console.log(payload)
     //add in things you want to add to user object
     if (dbUser.is_educator) {

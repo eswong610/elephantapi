@@ -5,6 +5,7 @@ import { Student } from './interfaces/student.interface';
 import { User } from './interfaces/user.interface';
 import { CreateUpdateEducatorDto } from './dto/create_educator.dto';
 import { CreateUpdateStudentDto } from './dto/create_student.dto';
+import { json } from 'express';
 
 
 @Controller('user')
@@ -39,5 +40,29 @@ export class UserController {
     async createStudent(@Body() createUpdateStudentDto: CreateUpdateStudentDto) : Promise<Student>{
         return this.userService.createStudent(createUpdateStudentDto);
     }
+
+    @Get('educator/:id/rating')
+    getEducatorRating(@Param() param): Promise<number> {
+        
+        let avgRating = 'asdf'
+        return this.userService.getEducatorRating(param.id)
+        .then((res)=>{
+            let numberRating = [];
+            res.forEach(function (arrayItem) {
+                numberRating.push(arrayItem.rating);
+            })
+            let avgRating = numberRating.reduce((acc, val) => acc + val) / numberRating.length;
+            // console.log(avgRating)
+            return avgRating;
+        })
+        .catch((err)=>{
+            return 0
+        })
+        
+        
+        
+
+    }
+
     
 }

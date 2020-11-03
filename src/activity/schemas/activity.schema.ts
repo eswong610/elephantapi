@@ -34,7 +34,15 @@ export const ActivitySchema = new mongoose.Schema({
     educatorID : {
         // required: true,
         type: mongoose.Schema.Types.ObjectId,
-        ref : "Educator"
+        ref : "User"
+    },
+    is_booked:{
+        type: Boolean,
+
+    },
+    studentID :{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
     //is_booked or studentID
 

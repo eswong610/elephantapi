@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Param, Delete} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards} from '@nestjs/common';
 import { CreateUpdateActivityDto } from './dto/createupdate-activity.dto';
 import { ActivityService } from './activity.service';
 import { Activity } from './interfaces/activity.interface';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 
 @Controller('activity')
+@UseGuards(JwtAuthGuard)
 export class ActivityController {
 
     constructor(private readonly activityService: ActivityService) {}
@@ -12,14 +14,16 @@ export class ActivityController {
     async getAll(): Promise<Activity[]>{
         return this.activityService.findAll();
     }
-    // @Get('all')
-    // getAll(): string {
-    //     return "hi bob"
-    // }
+    
 
     @Get(':id')
     async getOne(@Param() param): Promise<Activity>{
         return this.activityService.findOne(param.id);
+    }
+
+    @Get('educator/:id')
+    async getAllByEducator(@Param() param): Promise<Activity[]>{
+        return this.activityService.findByEducator(param.id);
     }
 
     // @Post("create")

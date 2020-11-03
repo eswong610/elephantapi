@@ -11,14 +11,17 @@ import { CategoryController } from './category/category.controller';
 import { CategoryModule } from './category/category.module';
 import { BookingService } from './booking/booking.service';
 import { EducatorRatingService } from './educator-rating/educator-rating.service';
-import { EducatorRatingModule } from './educator-rating/educator-rating.module';
+// import { EducatorRatingModule } from './educator-rating/educator-rating.module';
+import {EducatorRatingModule } from './educator-rating/educator-rating.module'
+import { BookingModule } from './booking/booking.module';
+
 
 
 
 
 @Module({
   imports: [ActivityModule, MongooseModule.forRoot(process.env.MONGO_URI), AuthModule, UserModule, CategoryModule, EducatorRatingModule],
-  controllers: [AppController, CategoryController],
-  providers: [AppService, BookingService, EducatorRatingService],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
