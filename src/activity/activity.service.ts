@@ -28,7 +28,16 @@ export class ActivityService {
     }
 
     async create(createActivityDto: CreateUpdateActivityDto): Promise<Activity> {
+        // createActivityDto.educatorID = userID
+        
         const createdActivity = new this.activityModel(createActivityDto)
         return createdActivity.save();
       }
+
+    async update(id:string, updateActivityDto: CreateUpdateActivityDto) : Promise<Activity>{
+        let dbActivity = this.activityModel.find({_id: id});
+        return this.activityModel.findOneAndReplace({_id : id}, updateActivityDto)
+        
+        
+    }
 }

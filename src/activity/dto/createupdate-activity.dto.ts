@@ -5,6 +5,8 @@ export class CreateUpdateActivityDto {
      readonly location: string;
      readonly price : number;
      readonly is_active: boolean;
-     readonly educatorID : string;
+     educatorID : string;
      readonly categoryID : string;
+     is_booked : boolean;
+     studentID : string;
 }

@@ -1,6 +1,6 @@
 export class CreateRatingDto {
     readonly educatorID: string;
-    readonly caretakerID: string;
+    readonly studentID: string;
     readonly activityID: string;
     readonly rating: number;
 }

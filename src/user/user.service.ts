@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus, ForbiddenException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Educator } from './interfaces/educator.interface';
 import { Model } from 'mongoose';
@@ -7,6 +7,8 @@ import { User } from './interfaces/user.interface';
 import { Rating } from '../educator-rating/interfaces/rating.interface'
 import { CreateUpdateEducatorDto } from './dto/create_educator.dto';
 import { CreateUpdateStudentDto } from './dto/create_student.dto';
+import { exception } from 'console';
+import {validate } from 'class-validator'
 
 
 
@@ -27,7 +29,7 @@ export class UserService {
         return this.userModel.findOne({_id: id})
     }
 
-    async findAllEducators() : Promise<Educator[]> {
+    async findAllEducators() : Promise<User[]> {
         return this.userModel.find({is_educator : true});
     }
 
@@ -74,14 +76,164 @@ export class UserService {
     }
 
     async createEducator(createEducatorDto: CreateUpdateEducatorDto): Promise<Educator> {
-        const createdEducator = new this.userModel(createEducatorDto)
-        return createdEducator.save();
+
+        let valError = ""
+        let dbUser = await this.userModel.findOne({username: createEducatorDto.username},(err,obj)=>{
+            if (!obj) {
+                console.log('no object found')
+                const createdEducator = new this.userModel(createEducatorDto)
+                return createdEducator.save();
+            }else{
+                console.log('user exist')
+                valError = "An account with this email already exists";
+                
+            }
+        })
+
+        let result = await valError.length ? valError : dbUser;
+
+        return result;
+        // let dbUser = this.userModel.findOne({username: createEducatorDto.username}, (err,obj)=>{
+        //     if (!obj) {
+
+                // const createdEducator = new this.userModel(createEducatorDto)
+                // return createdEducator.save();
+        //     }else{
+        //         return null;
+        //     }
+
+        // })
+
+        // return dbUser;
+
       }
 
-    async createStudent(createStudentDto: CreateUpdateStudentDto): Promise<Student> {
+    async update(id:string, createEducatorDto: CreateUpdateEducatorDto) : Promise<Educator>{
+        let dbActivity = this.userModel.find({_id: id});
+        return this.userModel.findOneAndReplace({_id : id}, createEducatorDto)
+    }
+
+
+    async createStudentPromise(createStudentDto: CreateUpdateStudentDto)  {
+        let valError = ""
+        let dbUser = await this.userModel.findOne({username: createStudentDto.username},(err,obj)=>{
+            if (!obj) {
+                console.log('no object found')
+                const createdStudent = new this.userModel(createStudentDto)
+                return createdStudent.save();
+            }else{
+                console.log('user exist')
+                valError = "An account with this email already exists";
+                
+            }
+        })
+
+        let result = await valError.length ? valError : dbUser;
+
+        return result;
+        // if (valError.length){
+        //     return valError;
+        // }else{
+        //     return dbUser;
+        // }
+            
+    }
+
+
+    async createStudent(createStudentDto : CreateUpdateStudentDto) {
         const createdStudent = new this.userModel(createStudentDto)
         return createdStudent.save();
     }
+    // async createStudent(createStudentDto: CreateUpdateStudentDto) {
+    //     console.log('creating student')
 
+    //     //make into promise? 
+
+    //     const errorValidation = []
+    //     let dbUser = await this.userModel.findOne({username: createStudentDto.username}, (err, obj)=>{
+    //         if (!obj) {
+    //             return obj;
+    //         }else{
+    //             console.log('dbuser else')
+    //             errorValidation.push(err)
+    //             return null
+    //             // errorValidation.push("Username already taken") 
+    //         }
+    //     })
+
+    //     if (!dbUser){
+
+    //         const createdStudent = new this.userModel(createStudentDto)
+    //         // console.log(createdStudent)
+    //         console.log('createdStudent')
+    //         createdStudent.save();
+    //     }
+
+    //     console.log(errorValidation)
+
+    //     if (errorValidation.length){
+    //         return errorValidation
+    //     }else{
+    //         return dbUser
+    //     }
+    //     // if (!isUser) {
+    //     //     const createdStudent = new this.userModel(createStudentDto)
+    //     //     console.log('createdStudent')
+    //     //     console.log(createdStudent);
+    //     //     return createdStudent.save();
+    //     // }
+
+    //     // console.log(dbUser)
+    //     // return null
+    // }
+
+    async addToConnect(username: string, userID: string): Promise<User> {
+        const dbConnectee = await this.userModel.findOne({username: username}, (err, obj)=>{
+            if (obj) {
+                return true  
+            }else{
+                return false;
+            }
+        })
+        if (dbConnectee) {
+            return this.userModel.findOneAndUpdate({_id: userID}, {$addToSet : {connected_users: username}}, {useFindAndModify: false})
+        }
+
+        
+        
+        
+    }
+
+    async getUserConnections(userID : string): Promise<User[]>{
+        console.log(userID);
+        const dbUser = await this.userModel.findOne({_id: userID});
+        let dbUserConnections =[]
+        for (let i =0 ; i < dbUser.connected_users.length; i++) {
+            let connectedUser = await this.findConnectedUser(dbUser.connected_users[i])
+            dbUserConnections.push(connectedUser)
+        }
+        // let dbUserConnections = await dbUser.connected_users.map(username => this.findConnectedUser(username))
+        
+        // dbUser.connected_users.map(x => dbUserConnections.push(this.userModel.find({username: x})))
+        
+        // // const dbUserConnection = await (dbUser.connected_users).foreach(username => dbUserConnections.push(this.userModel.find({username: username})))
+        // return dbUserConnections;
+
+        return dbUserConnections;
+    }
+
+    private findConnectedUser(username: string) {
+        let dbUser = this.userModel.findOne({username: username}, (err, obj)=>{
+            if (obj){
+                console.log(obj)
+                return obj
+            }else{
+                return null;
+            }
+        })
+        console.log(dbUser)
+        
+        return dbUser
+    }
     
 }

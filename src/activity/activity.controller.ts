@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, Put} from '@nestjs/common';
 import { CreateUpdateActivityDto } from './dto/createupdate-activity.dto';
 import { ActivityService } from './activity.service';
 import { Activity } from './interfaces/activity.interface';
@@ -15,15 +15,20 @@ export class ActivityController {
         return this.activityService.findAll();
     }
     
-
-    @Get(':id')
-    async getOne(@Param() param): Promise<Activity>{
-        return this.activityService.findOne(param.id);
+    @Get('category/:id')
+    async getActivitiesByCategory(@Param() param) : Promise<Activity[]>{
+        return this.activityService.findByCategory(param.id);
     }
+    
 
     @Get('educator/:id')
     async getAllByEducator(@Param() param): Promise<Activity[]>{
         return this.activityService.findByEducator(param.id);
+    }
+
+    @Get('student/:id')
+    async getAllByStudent(@Param() param): Promise<Activity[]>{
+        return this.activityService.findByStudent(param.id);
     }
 
     // @Post("create")
@@ -32,12 +37,22 @@ export class ActivityController {
     // }
 
     @Post("create")
-    async create(@Body() createUpdateActivityDto: CreateUpdateActivityDto) : Promise<Activity>{
+    async create(@Body() createUpdateActivityDto: CreateUpdateActivityDto, @Request() req) : Promise<Activity>{
+        // createUpdateActivityDto.educatorID = req.user._id
         return this.activityService.create(createUpdateActivityDto);
+    }
+
+    @Post('update/:id')
+    async update(@Body() createUpdateActivityDto: CreateUpdateActivityDto, @Param() param){
+        return this.activityService.update(param.id, createUpdateActivityDto)
     }
 
     @Delete(':id')
     delete(@Param() param) : string {
         return `deleted ${param.id}`
+    }
+    @Get(':id')
+    async getOne(@Param() param): Promise<Activity>{
+        return this.activityService.findOne(param.id);
     }
 }
