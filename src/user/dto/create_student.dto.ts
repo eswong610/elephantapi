@@ -18,7 +18,7 @@ export class CreateUpdateStudentDto {
     readonly disability_name: string;
     @IsInt()
     readonly disability_spectrum: number;
-    readonly student_interests: [];
+    readonly interests: [];
     
     
     

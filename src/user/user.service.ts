@@ -75,7 +75,7 @@ export class UserService {
         return this.userModel.findOne({_id: id});
     }
 
-    async createEducator(createEducatorDto: CreateUpdateEducatorDto): Promise<Educator> {
+    async createEducator(createEducatorDto: CreateUpdateEducatorDto) {
 
         let valError = ""
         let dbUser = await this.userModel.findOne({username: createEducatorDto.username},(err,obj)=>{
@@ -90,7 +90,7 @@ export class UserService {
             }
         })
 
-        let result = await valError.length ? valError : dbUser;
+        let result = await valError.length ? valError : "User created";
 
         return result;
         // let dbUser = this.userModel.findOne({username: createEducatorDto.username}, (err,obj)=>{
@@ -128,7 +128,7 @@ export class UserService {
             }
         })
 
-        let result = await valError.length ? valError : dbUser;
+        let result = await valError.length ? valError : "User Created";
 
         return result;
         // if (valError.length){

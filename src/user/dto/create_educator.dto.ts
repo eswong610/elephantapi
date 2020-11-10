@@ -19,9 +19,10 @@ export class CreateUpdateEducatorDto {
     readonly description: string;
     @IsInt()
     readonly age: Number;
-    @IsPhoneNumber("US")
+    
     readonly phone_number: string;
     readonly is_educator: boolean;
     readonly is_verified: boolean;
     readonly educator_rating: number;
+    readonly interests: [];
 }

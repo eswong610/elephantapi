@@ -40,7 +40,7 @@ export class UserController {
     }
 
     @Post("create-educator")
-    async createEducator(@Body() createUpdateEducatorDto: CreateUpdateEducatorDto) : Promise<Educator>{
+    async createEducator(@Body() createUpdateEducatorDto: CreateUpdateEducatorDto) {
         return this.userService.createEducator(createUpdateEducatorDto);
     }
 
