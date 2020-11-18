@@ -6,6 +6,7 @@ import { Student } from './interfaces/student.interface';
 import { User } from './interfaces/user.interface';
 import { CreateUpdateEducatorDto } from './dto/create_educator.dto';
 import { CreateUpdateStudentDto } from './dto/create_student.dto';
+import { v4 as uuid } from 'uuid'; 
 import { json } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
 import { JoiValidationPipe } from'./shared/pipes/joi-validation.pipes';
@@ -56,7 +57,6 @@ export class UserController {
     async update(@Body() createUpdateEducatorDto: CreateUpdateEducatorDto, @Param() param){
         return this.userService.update(param.id, createUpdateEducatorDto)
     }
-
     
     @Post("create-student")
     // @UsePipes(new JoiValidationPipe(UserSchema))
@@ -65,12 +65,19 @@ export class UserController {
     }
 
 
-    @Post('upload')
+    // @Post('uploadimg')
+    // @UseGuards(JwtAuthGuard)
+    // @UseInterceptors(FileInterceptor('file'))
+    // uploadFile(@UploadedFile() file, @Request() req) {
+    //     console.log(file);
+    //     return this.userService.imageUpload(req.user.username, file);
+    // }
+
+    @Post('uploadImage')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('file'))
-    uploadFile(@UploadedFile() file, @Request() req) {
-        console.log(file);
-        return this.userService.imageUpload(req.user.username, file);
+    public uploadImage(@Param() params: any, @Request() req, @UploadedFile() file: any): Promise<any> {
+       return this.userService.addImage(req.user.username, file, uuid());         
     }
 
     @Get('educator/:id/rating')

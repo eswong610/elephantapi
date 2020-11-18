@@ -244,54 +244,96 @@ export class UserService {
         return dbUser
     }
 
-    async imageUpload(username: string, file : any) {
-        console.log('hit image uplaod')
+
+    
+    async addImage(username: string, file:any, urlKey: string) : Promise<any>{
+        const params = {
+            Body: file.buffer,
+            Bucket: 'fuse2020',
+            Key: urlKey
+          };
+
         const s3 = new aws.S3({
             accessKeyId: process.env.S3_KEYID,
-            secretAccessKey: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
             
-           });
-        console.log('hit second image upload')
-        const profileImgUpload = multer({
-            storage: multerS3({
-            s3: s3,
-            bucket: 'fuse2020',
-            acl: 'public-read',
-            key: function (req, file, cb) {
-            cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
-            }
-            }),
-            limits:{ fileSize: 2000000 }, // In bytes: 2000000 bytes = 2 MB
-        }).single('uploadedimg');
+        });
 
-        profileImgUpload( file, ( error ) => {
-            if (error) {
-                console.log(error)
-            }else{
-                if (file===undefined){
-                    console.log('no file selected')
-                }else{
-                        const imageName = file.key;
-                        const imageLocation = file.location;
-                        
+        console.log(username)
+        // return this.userModel.findOneAndUpdate({username: username}, {$addToSet:{imageurl: urlKey}}, {useFindAndModify: false})
+       
 
-                        this.userModel.updateOne(
-                            {username: username},
-                            {$set:{imageurl: imageLocation}},
-                            )
-                            .then((data)=>{
-                                console.log('image url updated ' + data);
-                            })
-                            .catch(err=>{
-                                console.log(err)
-                            })
-                        
-                        
-                        }
-                    }
+        // await this.userModel.updateOne(
+        //     {username: username},
+        //     {$set:{"imageurl": urlKey}},
+        //     )
+        //     .then((data)=>{
+        //         console.log(data);
+        //         console.log('hello updated')
+        //         return ('updated db')
+        //         // console.log('image url updated ' + data);
+        //     })
+        //     .catch(err=>{
+        //         console.log(err)
+        //     })
+        s3.putObject(params)
+            .promise().then((res)=>{
+                this.userModel.findOneAndUpdate({username: username}, {$set : {image_url: urlKey}}, {useFindAndModify: false}).then((res)=>{return "success"}).catch(err => {return err})
+                return urlKey;
+            }).catch((err)=> {return err})
+          
         
-            })
     }
+
+    // async imageUpload(username: string, file : any) {
+      
+    //     const s3 = new aws.S3({
+    //         accessKeyId: process.env.S3_KEYID,
+    //         secretAccessKey: process.env.S3_ACCESS_KEY,
+            
+    //        });
+        
+    //     const profileImgUpload = multer({
+    //         storage: multerS3({
+    //         s3: s3,
+    //         bucket: 'fuse2020',
+    //         acl: 'public-read',
+    //         key: function (req, file, cb) {
+    //         cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
+    //         }
+    //         }),
+    //         limits:{ fileSize: 2000000 }, // In bytes: 2000000 bytes = 2 MB
+    //     }).single('uploadedimg');
+
+    //     profileImgUpload( file, ( error ) => {
+    //         console.log(file)
+    //         if (error) {
+    //             console.log(error)
+    //         }else{
+    //             if (file===undefined){
+    //                 console.log('no file selected')
+    //             }else{
+    //                     const imageName = file.key;
+    //                     const imageLocation = file.location;
+    //                     console.log(imageName)
+
+    //                     this.userModel.updateOne(
+    //                         {username: username},
+    //                         {$set:{imageurl: imageLocation}},
+    //                         )
+    //                         .then((data)=>{
+    //                             console.log('image url updated ' + data);
+    //                         })
+    //                         .catch(err=>{
+    //                             console.log(err)
+    //                         })
+                        
+                        
+    //                     }
+    //                 }
+        
+    //         })
+    // }
 
     
     

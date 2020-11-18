@@ -24,6 +24,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         return { 
             _id: dbUser.id,
             name: dbUser.name, 
+            username: payload.username,
             email: dbUser.email, 
             is_educator: dbUser.is_educator,
             is_verified: dbUser.is_verified,
