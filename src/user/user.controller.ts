@@ -1,4 +1,5 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, UsePipes} from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Request, UsePipes, UseInterceptors, UploadedFile, } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express'
 import {UserService } from './user.service';
 import { Educator } from './interfaces/educator.interface';
 import { Student } from './interfaces/student.interface';
@@ -39,6 +40,12 @@ export class UserController {
         return this.userService.findAllStudents();
     }
 
+    @Get('search/:searchword')
+    @UseGuards(JwtAuthGuard)
+    async searchUsers(@Param() param): Promise<any> {
+        return this.userService.searchByName(param.searchword)
+    }
+
     @Post("create-educator")
     async createEducator(@Body() createUpdateEducatorDto: CreateUpdateEducatorDto) {
         return this.userService.createEducator(createUpdateEducatorDto);
@@ -55,6 +62,15 @@ export class UserController {
     // @UsePipes(new JoiValidationPipe(UserSchema))
     async createStudent(@Body() createUpdateStudentDto: CreateUpdateStudentDto) {
         return (this.userService.createStudentPromise(createUpdateStudentDto));
+    }
+
+
+    @Post('upload')
+    @UseGuards(JwtAuthGuard)
+    @UseInterceptors(FileInterceptor('file'))
+    uploadFile(@UploadedFile() file, @Request() req) {
+        console.log(file);
+        return this.userService.imageUpload(req.user.username, file);
     }
 
     @Get('educator/:id/rating')

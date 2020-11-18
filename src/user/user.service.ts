@@ -7,6 +7,10 @@ import { User } from './interfaces/user.interface';
 import { Rating } from '../educator-rating/interfaces/rating.interface'
 import { CreateUpdateEducatorDto } from './dto/create_educator.dto';
 import { CreateUpdateStudentDto } from './dto/create_student.dto';
+import * as aws from 'aws-sdk';
+import * as multer from 'multer'
+import * as multerS3 from 'multer-s3';
+import * as path from 'path';
 import { exception } from 'console';
 import {validate } from 'class-validator'
 
@@ -69,6 +73,10 @@ export class UserService {
 
     async findAllStudents() : Promise<Student[]> {
         return this.userModel.find({is_educator: false});
+    }
+
+    async searchByName(name: string) : Promise<any> {
+        return this.userModel.find({"name" : {"$regex": name, "$options": "i"}});
     }
 
     async findStudent(id: string): Promise<Student> {
@@ -235,5 +243,56 @@ export class UserService {
         
         return dbUser
     }
+
+    async imageUpload(username: string, file : any) {
+        console.log('hit image uplaod')
+        const s3 = new aws.S3({
+            accessKeyId: process.env.S3_KEYID,
+            secretAccessKey: process.env.S3_ACCESS_KEY,
+            
+           });
+        console.log('hit second image upload')
+        const profileImgUpload = multer({
+            storage: multerS3({
+            s3: s3,
+            bucket: 'fuse2020',
+            acl: 'public-read',
+            key: function (req, file, cb) {
+            cb(null, path.basename( file.originalname, path.extname( file.originalname ) ) + '-' + Date.now() + path.extname( file.originalname ) )
+            }
+            }),
+            limits:{ fileSize: 2000000 }, // In bytes: 2000000 bytes = 2 MB
+        }).single('uploadedimg');
+
+        profileImgUpload( file, ( error ) => {
+            if (error) {
+                console.log(error)
+            }else{
+                if (file===undefined){
+                    console.log('no file selected')
+                }else{
+                        const imageName = file.key;
+                        const imageLocation = file.location;
+                        
+
+                        this.userModel.updateOne(
+                            {username: username},
+                            {$set:{imageurl: imageLocation}},
+                            )
+                            .then((data)=>{
+                                console.log('image url updated ' + data);
+                            })
+                            .catch(err=>{
+                                console.log(err)
+                            })
+                        
+                        
+                        }
+                    }
+        
+            })
+    }
+
+    
     
 }
