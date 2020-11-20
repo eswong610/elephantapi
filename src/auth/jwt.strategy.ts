@@ -22,7 +22,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     //add in things you want to add to user object
     if (dbUser.is_educator) {
         return { 
-            _id: dbUser.name, 
+            _id: dbUser.id,
+            name: dbUser.name, 
+            username: payload.username,
             email: dbUser.email, 
             is_educator: dbUser.is_educator,
             is_verified: dbUser.is_verified,

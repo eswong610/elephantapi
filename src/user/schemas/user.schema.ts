@@ -1,7 +1,7 @@
 import * as mongoose from 'mongoose'
 import * as bcrypt from 'bcrypt'
 
-
+mongoose.set('useCreateIndex', true);
 export const UserSchema = new mongoose.Schema({
 
     name: {
@@ -14,7 +14,8 @@ export const UserSchema = new mongoose.Schema({
     },
     username: {
         type: String,
-        required: true
+        required: true,
+       
     },
     password: {
         type: String,
@@ -45,7 +46,7 @@ export const UserSchema = new mongoose.Schema({
     student_name: {
         type: String,
     },
-    student_interests:{
+    interests:{
         type: Array,
     },
     is_educator: {
@@ -61,6 +62,9 @@ export const UserSchema = new mongoose.Schema({
     image_url: {
         type: String,
     },
+    connected_users: {
+        type:Array,
+    }
 }, {timestamps : true})
 
 // UserSchema.pre('save',  async function (next: mongoose.HookNextFunction) {

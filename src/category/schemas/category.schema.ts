@@ -9,6 +9,9 @@ export const CategorySchema = new mongoose.Schema({
         type: String,
        
     },
+    children : {
+        type: Array,
+    },
     is_active:{
         type: Boolean,
         required: true,

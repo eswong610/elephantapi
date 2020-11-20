@@ -5,7 +5,7 @@ export const RatingSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref : "User"
     },
-    caretakerID : {
+    studentID : {
         type: mongoose.Schema.Types.ObjectId,
         ref : "User"
     },

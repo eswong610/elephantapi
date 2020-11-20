@@ -5,4 +5,6 @@ export interface Activity {
     end_time: Date,
     educatorID: string,
     categoryID: string
+    is_booked: boolean,
+    studnetID : string
 }

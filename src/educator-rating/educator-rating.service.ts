@@ -17,4 +17,12 @@ export class EducatorRatingService {
         const newRating = new this.ratingModel(createRatingDto)
         return newRating.save();
     }
+
+    async findByID(userID : string): Promise<Rating[]>{
+        return this.ratingModel.find({educatorID : userID})
+    }
+
+    async findByStudentID(userID : string): Promise<Rating[]>{
+        return this.ratingModel.find({studentID : userID})
+    }
 }

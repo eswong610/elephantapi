@@ -14,6 +14,7 @@ import { EducatorRatingService } from './educator-rating/educator-rating.service
 // import { EducatorRatingModule } from './educator-rating/educator-rating.module';
 import {EducatorRatingModule } from './educator-rating/educator-rating.module'
 import { BookingModule } from './booking/booking.module';
+import { GoogleStrategy } from './auth/google.strategy';
 
 
 
@@ -22,6 +23,6 @@ import { BookingModule } from './booking/booking.module';
 @Module({
   imports: [ActivityModule, MongooseModule.forRoot(process.env.MONGO_URI), AuthModule, UserModule, CategoryModule, EducatorRatingModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, GoogleStrategy],
 })
 export class AppModule {}
