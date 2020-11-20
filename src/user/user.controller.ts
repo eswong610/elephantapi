@@ -25,8 +25,6 @@ export class UserController {
         return this.userService.findAll();
     }
 
-    
-
     @Get('educators')
     @UseGuards(JwtAuthGuard)
     async getEducators(): Promise<Educator[]>{
@@ -76,8 +74,10 @@ export class UserController {
     @Post('uploadImage')
     @UseGuards(JwtAuthGuard)
     @UseInterceptors(FileInterceptor('file'))
-    public uploadImage(@Param() params: any, @Request() req, @UploadedFile() file: any): Promise<any> {
-       return this.userService.addImage(req.user.username, file, uuid());         
+    public uploadImage(@Param() params: any, @Request() req, @UploadedFile() file: any) {
+        if (this.userService.addImage(req.user.username, file, uuid())){
+            return "image uploaded";
+        };         
     }
 
     @Get('educator/:id/rating')
@@ -117,7 +117,7 @@ export class UserController {
     }
 
      
-    @Get(':id')
+    @Get('/findone/:id')
     @UseGuards(JwtAuthGuard)
     async getOneStudent(@Param() param): Promise<Student>{
         return this.userService.findById(param.id);

@@ -205,11 +205,7 @@ export class UserService {
         })
         if (dbConnectee) {
             return this.userModel.findOneAndUpdate({_id: userID}, {$addToSet : {connected_users: username}}, {useFindAndModify: false})
-        }
-
-        
-        
-        
+        } 
     }
 
     async getUserConnections(userID : string): Promise<User[]>{
