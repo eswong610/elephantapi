@@ -243,19 +243,29 @@ export class UserService {
 
     
     async addImage(username: string, file:any, urlKey: string) : Promise<any>{
-        const params = {
-            Body: file.buffer,
-            Bucket: 'fuse2020',
-            Key: urlKey
-          };
+        // const params = {
+        //     Body: file.buffer,
+        //     Bucket: 'fuse2020',
+        //     Key: urlKey
+        //   };
 
-        const s3 = new aws.S3({
-            accessKeyId: process.env.S3_KEYID,
-            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+        // const s3 = new aws.S3({
+        //     accessKeyId: process.env.S3_KEYID,
+        //     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
             
-        });
+        // });
 
-        console.log(username)
+        // s3.putObject(params)
+        // .promise().then((res)=>{
+        //     this.userModel.findOneAndUpdate({username: username}, {$set : {image_url: urlKey}}, {useFindAndModify: false}).then((res)=>{return "success"}).catch(err => {return err})
+        //     return urlKey;
+        // }).catch((err)=> {return err})
+        // console.log(username)
+
+
+
+
+        
         // return this.userModel.findOneAndUpdate({username: username}, {$addToSet:{imageurl: urlKey}}, {useFindAndModify: false})
        
 
@@ -272,11 +282,7 @@ export class UserService {
         //     .catch(err=>{
         //         console.log(err)
         //     })
-        s3.putObject(params)
-            .promise().then((res)=>{
-                this.userModel.findOneAndUpdate({username: username}, {$set : {image_url: urlKey}}, {useFindAndModify: false}).then((res)=>{return "success"}).catch(err => {return err})
-                return urlKey;
-            }).catch((err)=> {return err})
+       
           
         
     }
