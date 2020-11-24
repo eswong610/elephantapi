@@ -26,13 +26,17 @@ export class CategoryService {
     async addToParentCategory(name: string, createCategoryDto: CreateCategoryDto): Promise<Category> {
         const dbCategory = await this.categoryModel.findOne({name: name}, (err, obj)=>{
             if (obj) {
+                console.log('category found')
                 return true  
             }else{
+                console.log('category not found')
                 return false;
             }
         })
+        //sub category has no id
         console.log('add to parent category service');
         if (dbCategory) {
+            console.log('findandupdate category')
             return this.categoryModel.findOneAndUpdate({_id: dbCategory._id}, {$addToSet : {children: createCategoryDto}}, {useFindAndModify: false})
         }
 

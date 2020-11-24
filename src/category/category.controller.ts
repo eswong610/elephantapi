@@ -25,6 +25,7 @@ export class CategoryController {
 
     @Post("create-children/:name")
     async createChildrenCategory(@Body() createCategoryDto: CreateCategoryDto, @Param() params) : Promise<Category>{
+        console.log('post to addtoparent');
         return this.categoryService.addToParentCategory(params.name, createCategoryDto);
     }
 
