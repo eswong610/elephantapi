@@ -11,7 +11,7 @@ import { EducatorRatingService } from 'src/educator-rating/educator-rating.servi
 import { EducatorRatingModule } from '../educator-rating/educator-rating.module'
 
 @Module({
-//   imports: [MongooseModule.forFeature([{name: "User", schema: UserSchema}])],
+  // imports: [MongooseModule.forFeature([{name: "User", schema: UserSchema}]), EducatorRatingModule],
   imports: [MongooseModule.forFeatureAsync([
       {
           name: "User", 
@@ -21,7 +21,7 @@ import { EducatorRatingModule } from '../educator-rating/educator-rating.module'
                 var user = this;
                 const saltRounds = 10; // What you want number for round paasword
                 const salt = await bcrypt.genSaltSync(saltRounds);
-                const hash = await bcrypt.hashSync(user.password, salt);
+                const hash = await bcrypt.hash(user.password, salt);
                 user.password = hash;
                 // bcrypt.genSalt(saltRounds, function(err, salt) {
                 //     if(err) return next(err);

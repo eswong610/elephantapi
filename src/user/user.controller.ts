@@ -9,7 +9,7 @@ import { CreateUpdateStudentDto } from './dto/create_student.dto';
 import { v4 as uuid } from 'uuid'; 
 import { json } from 'express';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard'
-import { JoiValidationPipe } from'./shared/pipes/joi-validation.pipes';
+// import { JoiValidationPipe } from'./shared/pipes/joi-validation.pipes';
 import { UserSchema } from './schemas/user.schema'
 
 

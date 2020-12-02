@@ -20,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     console.log('jwt.strategy.payload')
     console.log(payload)
     //add in things you want to add to user object
-    if (dbUser.is_educator) {
+    // if (dbUser.is_educator) {
         return { 
             _id: dbUser.id,
             name: dbUser.name, 
@@ -33,6 +33,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             rating: dbUser.educator_rating,
             image_url: dbUser.image_url
           };
-    } 
+    //} 
   }
 }
