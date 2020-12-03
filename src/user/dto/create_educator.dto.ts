@@ -24,5 +24,5 @@ export class CreateUpdateEducatorDto {
     readonly is_educator: boolean;
     readonly is_verified: boolean;
     readonly educator_rating: number;
-    readonly interests: [];
+    interests: [];
 }
